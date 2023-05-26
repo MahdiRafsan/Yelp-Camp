@@ -1,0 +1,40 @@
+<% layout("layouts/boilerplate") %>
+<div class="row mt-3">
+    <div class="card col-6 offset-3 mb-3">
+        <img src="https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80"
+        alt="Login Page Campground Image" class="card-img-top"/>
+        <div class="card-body">
+            <form action="/auth/register" method="post" class="form-group form-validation" novalidate>
+                <fieldset>
+                    <legend class="border-bottom">Register as a new user</legend>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" id="username" name="username" placeholder="Username" class="form-control" autofocus required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" placeholder="johndoe@email.com" class="form-control" required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Enter Password</label>
+                        <input type="password" id="password" name="password" placeholder="Password" class="form-control" required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+
+                    <!-- 
+                    <div class="mb-3">
+                        <label for="confirm" class="form-label">Confirm Password</label>
+                        <input type="password" id="confirm" name="confirm" placeholder="Confirm Password" class="form-control" required>
+                        <div class="valid-feedback">Looks good!</div>
+                    </div>
+                    -->
+                    <div class="d-grid gap-2 mb-3">
+                        <button class="btn btn-success">Register</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
