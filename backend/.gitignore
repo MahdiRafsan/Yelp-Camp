@@ -1,4 +1,4 @@
 node_modules
 .env
 api/seeds
-__tests__
+# /__tests__

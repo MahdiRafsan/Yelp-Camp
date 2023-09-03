@@ -1,0 +1,19 @@
+{
+  "name": "yelp-camp-rest-api",
+  "version": "1.0.0",
+  "description": "Yelp-Camp-REST-API",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MahdiRafsan/Yelp-Camp.git"
+  },
+  "author": "Mahdi Chowdhury",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MahdiRafsan/Yelp-Camp/issues"
+  },
+  "homepage": "https://github.com/MahdiRafsan/Yelp-Camp#readme"
+}
