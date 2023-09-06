@@ -9,6 +9,8 @@ const Schema = mongoose.Schema;
 
 const userSchema = Schema(
   {
+    oAuthProvider: { type: String },
+    oAuthId: { type: String },
     username: {
       type: String,
       required: [true, "Username is a required field!"],
@@ -42,7 +44,12 @@ const userSchema = Schema(
     },
     password: {
       type: String,
-      required: [true, "Password is a required field!"],
+      required: [
+        function () {
+          return this.oAuthProvider !== "Google";
+        },
+        "Password is a required field!",
+      ],
       select: false,
       validate: {
         validator: (value) => validator.isStrongPassword(value),
@@ -50,8 +57,7 @@ const userSchema = Schema(
           "Password should contain atleast 1 uppercase, 1 lowercase, 1 number, and 1 symbol and be atleast 8 characters long.",
       },
     },
-    oauthProvider: { type: String },
-    oauthId: { type: String },
+
     firstName: { type: String, trim: true },
     lastName: { type: String, trim: true },
     bio: {
@@ -111,7 +117,7 @@ userSchema.methods.generatePasswordResetToken = function () {
     .digest("hex");
   this.resetToken = hashedToken; // store hashed Token in DB
   this.resetTokenExpiry = Date.now() + 15 * 60 * 1000; // expires in 15 mins
-  this.save() // save token info to DB
+  this.save(); // save token info to DB
   return plainToken; // send plain token to user
 };
 

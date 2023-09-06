@@ -1,19 +1,30 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Avatar, Container, Grid, Typography } from "@mui/material";
+import { useGoogleLogin } from "@react-oauth/google";
+import {
+  Paper,
+  Avatar,
+  Container,
+  Divider,
+  Grid,
+  Typography,
+  Box,
+  Stack,
+} from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-
 import InputField from "./InputField";
-import { StyledPaper, Form, StyledButton } from "./Auth.styles";
+import { LoadingButton } from "@mui/lab";
 
 import {
   useRegisterUserMutation,
   useLoginUserMutation,
+  useGoogleOAuthLoginMutation,
 } from "../../features/auth/authAPI";
 import { setCredentials } from "../../features/auth/authSlice";
 
 import useToastMessages from "../../hooks/useToastMessages";
+import GoogleLogin from "./GoogleLogin";
 
 const Auth = () => {
   const dispatch = useDispatch();
@@ -55,13 +66,35 @@ const Auth = () => {
 
   const [register, { isLoading: isRegisterLoading }] =
     useRegisterUserMutation();
+
   const [login, { isLoading: isLoginLoading }] = useLoginUserMutation();
+
+  const [googleOAuthLogin, { isLoading: isGoogleLoading }] =
+    useGoogleOAuthLoginMutation();
+
   const isLoading = isSignUp ? isRegisterLoading : isLoginLoading;
 
   const onChangeHandler = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+
+  const onGoogleLoginHandler = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async (res) => {
+      const code = { code: res?.code };
+      try {
+        const response = await googleOAuthLogin(code).unwrap();
+        const { message, userId, token, user } = response;
+        dispatch(setCredentials({ userId, token, user }));
+        showToast(message, "success");
+        navigate("/");
+      } catch (err) {
+        showToast(err.data.message, "error");
+      }
+    },
+    onError: (err) => console.log(err),
+  });
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     const signUpData = {
@@ -90,17 +123,19 @@ const Auth = () => {
       showToast(err.data.message, "error");
     }
   };
-
   return (
-    <Container component="main" maxWidth="xs">
-      <StyledPaper elevation={0}>
-        <Avatar variant="rounded" sx={{ mb: "5px", bgcolor: "#f73378" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
+    <Container component="main" maxWidth="xs" sx={{ marginTop: "32px" }}>
+      <Paper sx={{ padding: "16px" }} elevation={0}>
+        <Box display="flex" justifyContent="center" mt={2}>
+          <Avatar variant="rounded" sx={{ mb: "16px", bgcolor: "#f73378" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+        </Box>
+        <Typography component="h1" variant="h5" mb={2} align="center">
           {isSignUp ? "Create a new account" : "Log into your account"}
         </Typography>
-        <Form onSubmit={onSubmitHandler} noValidate>
+
+        <form onSubmit={onSubmitHandler} noValidate>
           <Grid container spacing={2}>
             {isSignUp && (
               <>
@@ -175,22 +210,35 @@ const Auth = () => {
               />
             )}
           </Grid>
-          <StyledButton
+          <LoadingButton
             loading={isLoading}
-            loadingIndicator="Loading..."
+            loadingIndicator={isSignUp ? "Signing Up..." : "Logging In..."}
             type="submit"
             variant="contained"
             color="primary"
+            fullWidth
+            sx={{ margin: "16px 0" }}
           >
             {isSignUp ? "Sign Up" : "Login "}
-          </StyledButton>
-        </Form>
-        <StyledButton onClick={switchSignUpMode}>
-          {isSignUp
-            ? "Already have an account? Login"
-            : "Need an account? Sign up here"}
-        </StyledButton>
-      </StyledPaper>
+          </LoadingButton>
+        </form>
+        <Stack spacing={2}>
+          <LoadingButton onClick={switchSignUpMode}>
+            {isSignUp
+              ? "Already have an account? Login"
+              : "Need an account? Sign up here"}
+          </LoadingButton>
+          <Divider variant="fullWidth">
+            <Typography component="small" variant="caption">
+              or
+            </Typography>
+          </Divider>
+          <GoogleLogin
+            onGoogleLoginHandler={onGoogleLoginHandler}
+            isLoading={isGoogleLoading}
+          />
+        </Stack>
+      </Paper>
     </Container>
   );
 };

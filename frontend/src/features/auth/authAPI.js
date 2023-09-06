@@ -16,7 +16,18 @@ export const authApi = api.injectEndpoints({
         body: credentials,
       }),
     }),
+    googleOAuthLogin: builder.mutation({
+      query: (code) => ({
+        url: "auth/login/google",
+        method: "POST",
+        body: code,
+      }),
+    }),
   }),
 });
 
-export const { useRegisterUserMutation, useLoginUserMutation } = authApi;
+export const {
+  useRegisterUserMutation,
+  useLoginUserMutation,
+  useGoogleOAuthLoginMutation,
+} = authApi;

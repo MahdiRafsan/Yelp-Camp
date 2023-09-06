@@ -1,5 +1,7 @@
 const express = require("express");
+const cors = require("cors");
 
+const { CORS_OPTIONS } = require("./config/constants");
 const { NotFoundError } = require("./errors");
 const errorMiddleware = require("./middlewares/errorMiddleware");
 
@@ -14,6 +16,7 @@ const apiPrefix = "/api/v1";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors(CORS_OPTIONS));
 
 app.use(`${apiPrefix}/auth`, userAuth);
 app.use(`${apiPrefix}/user`, user);
