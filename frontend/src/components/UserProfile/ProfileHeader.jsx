@@ -1,24 +1,13 @@
 import { Avatar, Paper, Typography, Grid } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/auth/authSlice";
 
 const ProfileHeader = () => {
-  const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
-  const user = useSelector(selectUser)
+  const user = useSelector(selectUser);
 
   return (
     <>
-      <Paper
-        elevation={4}
-        sx={{
-          padding: "15px",
-          // width: isSmall ? "100%" : "85%",
-          // margin: "0 auto",
-        }}
-      >
+      <Paper elevation={4} sx={{ padding: "16px" }}>
         <Grid container spacing={2}>
           <Grid item>
             <Avatar
@@ -41,7 +30,11 @@ const ProfileHeader = () => {
             <Typography component="h2" variant="body1">
               {user.email}
             </Typography>
-            <Typography component="p" variant="body2">
+            <Typography
+              component="p"
+              variant="body2"
+              sx={{ wordWrap: "break-word" }}
+            >
               {user.bio}
             </Typography>
           </Grid>

@@ -28,19 +28,19 @@ const getAllUsers = async (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-  const user = await User.findById(req.params.userId).select("-password");
+  let user = await User.findById(req.params.userId).select("-password");
 
   if (!user) {
     throw new NotFoundError(
       `No user with the id ${req.params.userId} is found in the database!`
     );
   }
-  res.status(StatusCodes.OK).json(user);
+  user = { ...user.toObject(), fullName: user.fullName };
+  res.status(StatusCodes.OK).json({ user });
 };
 
 const updateUser = async (req, res, next) => {
   const { username, email, firstName, lastName, bio } = req.body;
-
   const user = await User.findById(req.params.userId).select("-password");
   if (!user) {
     throw new NotFoundError(
@@ -53,7 +53,7 @@ const updateUser = async (req, res, next) => {
     await deleteImage(user.profile_pic.cloudinary_id);
   }
 
-  const updatedUser = await User.findOneAndUpdate(
+  let updatedUser = await User.findOneAndUpdate(
     { _id: req.params.userId },
     {
       $set: {
@@ -68,6 +68,9 @@ const updateUser = async (req, res, next) => {
     },
     { new: true, runValidators: true }
   );
+
+  updatedUser = { ...updatedUser.toObject(), fullName: updatedUser.fullName };
+
   res.status(StatusCodes.OK).json({
     message: "Account updated successfully.",
     updatedUser,

@@ -3,7 +3,8 @@ import { api } from "../api/apiSlice";
 const reviewApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getReviews: builder.query({
-      query: (campgroundId) => `campgrounds/${campgroundId}/reviews`,
+      query: ({ campgroundId, page }) =>
+        `campgrounds/${campgroundId}/reviews?page=${page}&limit=6`,
       providesTags: ["Reviews"],
     }),
     getReviewById: builder.query({

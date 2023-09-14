@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useGoogleLogin } from "@react-oauth/google";
 import {
   Paper,
@@ -28,8 +28,13 @@ import GoogleLogin from "./GoogleLogin";
 
 const Auth = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const navigate = useNavigate();
   const showToast = useToastMessages();
+
+  // url location with search params user came from
+  const from =
+    `${location.state?.from?.pathname}${location.state?.from?.search}` || "/";
 
   const initialState = {
     firstName: "",
@@ -88,7 +93,7 @@ const Auth = () => {
         const { message, userId, token, user } = response;
         dispatch(setCredentials({ userId, token, user }));
         showToast(message, "success");
-        navigate("/");
+        navigate(from, { replace: true });
       } catch (err) {
         showToast(err.data.message, "error");
       }
@@ -118,7 +123,7 @@ const Auth = () => {
       const { message, userId, token, user } = response;
       dispatch(setCredentials({ userId, token, user }));
       showToast(message, "success");
-      navigate("/");
+      navigate(from, { replace: true });
     } catch (err) {
       showToast(err.data.message, "error");
     }

@@ -22,17 +22,17 @@ const upload = multer({
 // private
 // accessible to all users
 router.get("/:campgroundId", isAuthorized, getCampground);
-router.get("/", isAuthorized, getCampgrounds);
+router.get("/",  getCampgrounds);
 
 // private
-router.post("/", isAuthorized, upload.array("image"), createCampground);
+router.post("/", isAuthorized, upload.array("images"), createCampground);
 
 // private but only accessible to admin and owner
 router.patch(
   "/:campgroundId",
   isAuthorized,
-  upload.array("image"),
   isCampgroundOwner,
+  upload.array("images"),
   updateCampground
 );
 

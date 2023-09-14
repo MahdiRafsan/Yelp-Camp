@@ -23,8 +23,8 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route element={<RootLayout />}>
           <Route path="/landing" element={<Navbar />} />
+          <Route path="/campgrounds" element={<HomePage />} />
           <Route path="/" element={<ProtectedRoutes />}>
-            <Route index element={<HomePage />} />
             <Route
               path="/campgrounds/:campgroundId"
               element={<CampgroundDetailsPage />}

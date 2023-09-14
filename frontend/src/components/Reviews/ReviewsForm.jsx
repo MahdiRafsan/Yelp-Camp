@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { forwardRef, useEffect, useState } from "react";
 import { Paper, Typography, Stack, Rating, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import {
@@ -8,9 +8,9 @@ import {
 } from "../../features/reviews/reviewApi";
 import useToastMessages from "../../hooks/useToastMessages";
 
-const ReviewsForm = ({ campgroundId, currentReviewId, setCurrentReviewId }) => {
+const ReviewsForm = forwardRef((props, ref) => {
+  const { campgroundId, currentReviewId, setCurrentReviewId } = props
   const showToast = useToastMessages();
-
   const { data: reviewData } = useGetReviewByIdQuery({
     campgroundId,
     reviewId: currentReviewId,
@@ -62,8 +62,8 @@ const ReviewsForm = ({ campgroundId, currentReviewId, setCurrentReviewId }) => {
   };
 
   return (
-    <Paper elevation={6} sx={{ padding: "16px" }}>
-      <Typography component="h1" variant="h4" mb={2}>
+    <Paper ref={ref} elevation={6} sx={{ padding: "16px" }}>
+      <Typography component="h2" variant="h4" mb={2}>
         {currentReviewId ? "Edit" : "Add"} a review
       </Typography>
       <form onSubmit={onSubmitHandler} noValidate>
@@ -104,6 +104,6 @@ const ReviewsForm = ({ campgroundId, currentReviewId, setCurrentReviewId }) => {
       </form>
     </Paper>
   );
-};
+});
 
 export default ReviewsForm;

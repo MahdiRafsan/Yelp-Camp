@@ -1,9 +1,9 @@
 import mapboxgl from "mapbox-gl";
 import { useState, useEffect, useRef } from "react";
 import { useGetCampgroundByIdQuery } from "../features/campgrounds/campgroundApi";
+import { Typography } from "@mui/material";
 const MapBox = ({ campgroundId }) => {
-  mapboxgl.accessToken =
-    "pk.eyJ1IjoibWFoZGlyYWZzYW4iLCJhIjoiY2xqN2k4NGRsMG43azNlbXhyODV4dG5mNyJ9.t5yLYOKEfV_7T9aoEdsm1w";
+  mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_ACCESS_TOKEN;
 
   const { data, isSuccess } = useGetCampgroundByIdQuery(campgroundId);
   let campground;
@@ -49,7 +49,14 @@ const MapBox = ({ campgroundId }) => {
     };
   }, [isSuccess, data]);
 
-  return <div ref={mapContainer} style={{ height: "400px" }} />;
+  return (
+    <>
+      <Typography component="h2" variant="h4" gutterBottom>
+        Location
+      </Typography>
+      <div ref={mapContainer} style={{ height: "400px" }} />
+    </>
+  );
 };
 
 export default MapBox;

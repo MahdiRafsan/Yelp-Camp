@@ -3,7 +3,7 @@ import { api } from "../api/apiSlice";
 const campgroundApi = api.injectEndpoints({
   endpoints: (builder) => ({
     getCampgrounds: builder.query({
-      query: () => "campgrounds",
+      query: ({ page }) => `campgrounds?page=${page}&limit=6`,
       providesTags: ["Campgrounds"],
     }),
     getCampgroundById: builder.query({

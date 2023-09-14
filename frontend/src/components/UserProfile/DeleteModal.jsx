@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -9,8 +8,6 @@ import {
   Stack,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useDeleteUserMutation } from "../../features/users/userAPI";
-import useToastMessages from "../../hooks/useToastMessages";
 
 const DeleteModal = ({ onModalOpen, onModalClose, onDelete }) => {
   // styles

@@ -1,22 +1,40 @@
-import { useSelector } from "react-redux";
-import { Grid, Paper, Typography } from "@mui/material";
-import { useGetReviewsQuery } from "../../features/reviews/reviewApi";
-import Review from "./Review";
-import { selectUser } from "../../features/auth/authSlice";
-const ReviewsSection = ({ campgroundId, setCurrentReviewId }) => {
-  const user = useSelector(selectUser);
-  const { data } = useGetReviewsQuery(campgroundId);
+import { useSearchParams } from "react-router-dom";
 
-  return (
-    <Paper elevation={3} sx={{ padding: "15px" }}>
-      <Typography component="h1" variant="h3" gutterBottom>
-        {data?.reviews.length ? "Reviews" : "No reviews yet"}
+import { Grid, Paper, Typography, Box, CircularProgress } from "@mui/material";
+
+import { useGetReviewsQuery } from "../../features/reviews/reviewApi";
+
+import Pagination from "../Pagination/Pagination";
+import Review from "./Review";
+
+const ReviewsSection = ({
+  reviewFormRef,
+  campgroundId,
+  setCurrentReviewId,
+}) => {
+  const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
+  const page = searchParams.get("page");
+
+  const onPageChangeHandler = (event, newPage) => {
+    setSearchParams({ page: newPage });
+  };
+
+  const { data, isLoading } = useGetReviewsQuery({ campgroundId, page });
+  const { reviews, currentPage, totalPages, totalDocs } = data || {};
+
+  return isLoading ? (
+    <CircularProgress />
+  ) : (
+    <Paper elevation={3} sx={{ padding: "16px" }}>
+      <Typography component="h2" variant="h4" gutterBottom>
+        {reviews?.length ? "Reviews" : "No reviews yet"}
       </Typography>
       <Grid container spacing={2}>
-        {data?.reviews.map((review) => {
+        {reviews.map((review) => {
           return (
-            <Grid key={review._id} item xs={12} md={6} lg={6}>
+            <Grid key={review._id} item xs={12} md={12} lg={12}>
               <Review
+                reviewFormRef={reviewFormRef}
                 campgroundId={campgroundId}
                 review={review}
                 setCurrentReviewId={setCurrentReviewId}
@@ -25,6 +43,13 @@ const ReviewsSection = ({ campgroundId, setCurrentReviewId }) => {
           );
         })}
       </Grid>
+      <Box m={2} display="flex" justifyContent="center">
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onPageChange={onPageChangeHandler}
+        />
+      </Box>
     </Paper>
   );
 };

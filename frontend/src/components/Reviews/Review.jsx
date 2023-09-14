@@ -10,7 +10,12 @@ import useToastMessages from "../../hooks/useToastMessages";
 
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/auth/authSlice";
-const Review = ({ campgroundId, review, setCurrentReviewId }) => {
+const Review = ({
+  campgroundId,
+  review,
+  setCurrentReviewId,
+  reviewFormRef,
+}) => {
   const user = useSelector(selectUser);
   const showToast = useToastMessages();
 
@@ -18,6 +23,9 @@ const Review = ({ campgroundId, review, setCurrentReviewId }) => {
 
   const onEditHandler = () => {
     setCurrentReviewId(review._id);
+    if (reviewFormRef.current) {
+      reviewFormRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   const onDeleteHandler = async () => {
@@ -34,7 +42,7 @@ const Review = ({ campgroundId, review, setCurrentReviewId }) => {
     <>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Avatar
-          sx={{ marginRight: "15px" }}
+          sx={{ marginRight: "16px" }}
           src={review?.author?.profile_pic?.url}
           alt={review?.author?.username}
         />
@@ -51,7 +59,10 @@ const Review = ({ campgroundId, review, setCurrentReviewId }) => {
       >
         {`Reviewed on ${moment(review.createdAt).format("MMMM Do, YYYY")}`}
       </Typography>
-      <Typography sx={{ margin: "15px 0" }} gutterBottom>
+      <Typography
+        sx={{ margin: "16px 0", wordWrap: "break-word" }}
+        gutterBottom
+      >
         {review.description}
       </Typography>
       {user._id === review.author._id && (

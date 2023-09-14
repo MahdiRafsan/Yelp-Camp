@@ -70,7 +70,7 @@ const Campground = ({ formRef, campground, setCurrentCampgroundId }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        {user._id === campground.author._id && (
+        {user?._id === campground.author._id && (
           <>
             <LoadingButton
               variant="contained"

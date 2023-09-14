@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { useSelector } from "react-redux";
 import { Container, Grid } from "@mui/material";
 import Campgrounds from "../components/Campgrounds/Campgrounds";
 import CampgroundForm from "../components/CampgroundForm/CampgroundForm";

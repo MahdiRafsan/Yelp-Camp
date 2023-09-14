@@ -51,7 +51,7 @@ const errorMiddleware = (err, req, res, next) => {
 
   if (process.env.NODE_ENV === "development") {
     // if (err.name === "CastError") err = castErrorHandler(err);
-    // if (err.name === "ValidationError") err = validationErrorHandler(err);
+    if (err.name === "ValidationError") err = validationErrorHandler(err);
 
     devErrors(res, err);
     

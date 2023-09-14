@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import {
@@ -44,6 +44,7 @@ const Navbar = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -58,7 +59,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("auth");
+    navigate("/auth");
   };
 
   return (
@@ -141,6 +142,7 @@ const Navbar = () => {
                   variant="contained"
                   color="primary"
                   sx={{ borderRadius: 2 }}
+                  state={{ from: location }}
                 >
                   Sign In
                 </Button>

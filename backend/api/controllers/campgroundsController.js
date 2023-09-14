@@ -40,14 +40,7 @@ const createCampground = catchAsync(async (req, res, next) => {
 const getCampground = catchAsync(async (req, res, next) => {
   const campground = await Campground.findById(
     req.params.campgroundId
-  ).populate([
-    {
-      path: "reviews",
-      select: "rating",
-      populate: [{ path: "author", select: "username" }], // populate author of reviews with only username
-    },
-    { path: "author" }, // populate author of a campground
-  ]);
+  ).populate('author');
   if (!campground) {
     throw new NotFoundError("Campground not found!");
   }

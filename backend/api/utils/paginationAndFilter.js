@@ -11,6 +11,12 @@ const paginationAndFilter = async (
   const { page, limit } = paginationOptions;
 
   let query = model.find(queryOptions);
+
+  // check if data model has author described in schema
+  if (model.schema.path("author")) {
+    query.populate({ path: "author", select: "username id profile_pic" });
+  }
+
   // PAGINATION
   const currentPage = parseInt(page) || 1;
   const limitPerPage = parseInt(limit) || 15;
