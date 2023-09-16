@@ -21,24 +21,19 @@ import ForestIcon from "@mui/icons-material/Forest";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 import { StyledAppBar, StyledTypography } from "./Navbar.styles";
-import { logout, selectUser } from "../../features/auth/authSlice";
-const settings = [
-  {
-    title: "Profile",
-    path: "profile",
-    icon: <PermIdentityIcon fontSize="small" />,
-  },
-  {
-    title: "Account",
-    path: "password",
-    icon: <SettingsOutlinedIcon fontSize="small" />,
-  },
-];
+import {
+  logout,
+  selectUser,
+  selectUserId,
+} from "../../features/auth/authSlice";
 
 const Navbar = () => {
   const user = useSelector(selectUser);
+  const userId = useSelector(selectUserId);
+
   const theme = useTheme();
   const match = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -48,6 +43,25 @@ const Navbar = () => {
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  // not displaying account link for google oauth users
+  const settings = [
+    {
+      title: "Profile",
+      path: "profile",
+      icon: <PermIdentityIcon fontSize="small" />,
+    },
+    !user?.oAuthId && {
+      title: "Account",
+      path: "password",
+      icon: <SettingsOutlinedIcon fontSize="small" />,
+    },
+    {
+      title: "Public Profile",
+      path: `profile/${userId}`,
+      icon: <PeopleOutlineIcon fontSize="small" />,
+    },
+  ].filter(Boolean);
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -75,7 +89,11 @@ const Navbar = () => {
           >
             <Box>
               <ForestIcon sx={{ color: "#fff" }} />
-              <StyledTypography component={Link} to="/" variant="h5">
+              <StyledTypography
+                component={Link}
+                to={user ? "/campgrounds" : "/"}
+                variant="h5"
+              >
                 Yelp-Camp
               </StyledTypography>
             </Box>

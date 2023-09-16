@@ -1,6 +1,14 @@
 import moment from "moment";
 
-import { Box, Avatar, Typography, Rating, Divider, Grid } from "@mui/material";
+import {
+  Box,
+  Avatar,
+  Typography,
+  Rating,
+  Divider,
+  Grid,
+  Link,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { LoadingButton } from "@mui/lab";
@@ -40,16 +48,22 @@ const Review = ({
   };
   return (
     <>
-      <Box sx={{ display: "flex", alignItems: "center" }}>
-        <Avatar
-          sx={{ marginRight: "16px" }}
-          src={review?.author?.profile_pic?.url}
-          alt={review?.author?.username}
-        />
-        <Typography component="h2" variant="body1" gutterBottom>
-          {review.author.username}
-        </Typography>
-      </Box>
+      <Link
+        href={`/profile/${review.author._id}`}
+        color="inherit"
+        underline="none"
+      >
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Avatar
+            sx={{ marginRight: "16px" }}
+            src={review?.author?.profile_pic?.url}
+            alt={review?.author?.username}
+          />
+          <Typography component="h2" variant="body1" gutterBottom>
+            {review.author.username}
+          </Typography>
+        </Box>
+      </Link>
       <Rating value={review.rating} readOnly sx={{ marginTop: "10px" }} />
       <Typography
         component="p"

@@ -27,7 +27,7 @@ const ReviewsSection = ({
   ) : (
     <Paper elevation={3} sx={{ padding: "16px" }}>
       <Typography component="h2" variant="h4" gutterBottom>
-        {reviews?.length ? "Reviews" : "No reviews yet"}
+        {totalDocs > 0 ? "Reviews" : "No reviews yet"}
       </Typography>
       <Grid container spacing={2}>
         {reviews.map((review) => {
@@ -43,13 +43,15 @@ const ReviewsSection = ({
           );
         })}
       </Grid>
-      <Box m={2} display="flex" justifyContent="center">
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onPageChange={onPageChangeHandler}
-        />
-      </Box>
+      {totalPages > 1 && (
+        <Box m={2} display="flex" justifyContent="center">
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onPageChange={onPageChangeHandler}
+          />
+        </Box>
+      )}
     </Paper>
   );
 };

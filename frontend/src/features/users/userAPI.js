@@ -2,11 +2,13 @@ import { api } from "../api/apiSlice";
 
 export const userApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    getUser: builder.query({
-      query: (userId) => ({
-        url: `user/${userId}`,
-        credentials: "include",
-      }),
+    getUsers: builder.query({
+      query: ({ page }) => `user?page=${page}&limit=10`,
+      providesTags: ["Users"],
+    }),
+    getUserById: builder.query({
+      query: (userId) => `user/${userId}`,
+      providesTags: ["Users"],
     }),
     updateUser: builder.mutation({
       query: ({ user, id }) => ({
@@ -14,12 +16,19 @@ export const userApi = api.injectEndpoints({
         method: "PATCH",
         body: user,
       }),
+      invalidatesTags: ["Users"],
     }),
     deleteUser: builder.mutation({
       query: (id) => ({
         url: `user/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Users"],
+    }),
+    getCampgroundsByUser: builder.query({
+      query: ({ userId, page }) =>
+        `user/${userId}/campgrounds?page=${page}&limit=6`,
+      providesTags: ["Campgrounds"],
     }),
     updatePassword: builder.mutation({
       query: ({ passwordData, id }) => ({
@@ -46,9 +55,11 @@ export const userApi = api.injectEndpoints({
 });
 
 export const {
-  useGetUserQuery,
+  useGetUsersQuery,
+  useGetUserByIdQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useGetCampgroundsByUserQuery,
   useUpdatePasswordMutation,
   useInitiatePasswordResetMutation,
   useResetPasswordMutation,

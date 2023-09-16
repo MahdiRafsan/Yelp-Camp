@@ -2,6 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 
 const { NotFoundError } = require("../errors");
 const User = require("../models/UserModel");
+const Campground = require("../models/CampgroundModel");
 const { deleteImage } = require("../utils/cloudinary");
 const paginationAndFilter = require("../utils/paginationAndFilter");
 
@@ -93,9 +94,26 @@ const deleteUser = async (req, res, next) => {
 
   res.status(StatusCodes.OK).json({ message: "User deleted successfully" });
 };
+
+const getCampgroundsByUser = async (req, res, error) => {
+  const { userId } = req.params;
+  const { page, limit } = req.query;
+
+  const paginationOptions = { page, limit };
+  let queryOptions = { author: userId };
+
+  const { data, totalPages, currentPage, totalDocs } =
+    await paginationAndFilter(Campground, paginationOptions, queryOptions);
+
+  res
+    .status(StatusCodes.OK)
+    .json({ campgrounds: data, totalPages, currentPage, totalDocs });
+};
+
 module.exports = {
   getAllUsers,
   getUser,
   updateUser,
   deleteUser,
+  getCampgroundsByUser,
 };

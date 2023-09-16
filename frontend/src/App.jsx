@@ -15,6 +15,7 @@ import ProfileForm from "./components/UserProfile/ProfileForm";
 import PasswordForm from "./components/UserProfile/PasswordForm";
 import RootLayout from "./layouts/RootLayout";
 import DeleteProfile from "./components/UserProfile/DeleteProfile";
+import PublicProfile from "./components/UserProfile/PublicProfile";
 
 function App() {
   return (
@@ -32,8 +33,9 @@ function App() {
             <Route element={<UserProfilePage />}>
               <Route path="/profile" element={<ProfileForm />} />
               <Route path="/password" element={<PasswordForm />} />
-              <Route path="delete" element={<DeleteProfile />} />
+              <Route path="/delete" element={<DeleteProfile />} />
             </Route>
+            <Route path="/profile/:userId" element={<PublicProfile />} />
           </Route>
         </Route>
       </Routes>

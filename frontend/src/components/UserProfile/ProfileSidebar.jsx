@@ -16,35 +16,37 @@ import PasswordIcon from "@mui/icons-material/Password";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../features/auth/authSlice";
-
-const sidebarData = [
-  {
-    title: "View Public Profile",
-    path: "/",
-    icon: <PeopleIcon />,
-  },
-  {
-    title: "Profile",
-    path: "/profile",
-    icon: <AccountCircleIcon />,
-  },
-  {
-    title: "Account Security",
-    path: "/password",
-    icon: <PasswordIcon />,
-  },
-  {
-    title: "Delete Account",
-    path: "/delete",
-    icon: <PersonRemoveIcon />,
-  },
-];
+import { selectUser, selectUserId } from "../../features/auth/authSlice";
 
 const ProfileSidebar = () => {
+  const user = useSelector(selectUser);
+  const userId = useSelector(selectUserId);
+  const location = useLocation();
 
-  const user = useSelector(selectUser)
-  const location = useLocation()
+  // not displaying account link for google oauth users
+  const sidebarData = [
+    {
+      title: "View Public Profile",
+      path: `/profile/${userId}`,
+      icon: <PeopleIcon />,
+    },
+    {
+      title: "Profile",
+      path: "/profile",
+      icon: <AccountCircleIcon />,
+    },
+    !user.oAuthId && {
+      title: "Account Security",
+      path: "/password",
+      icon: <PasswordIcon />,
+    },
+    {
+      title: "Delete Account",
+      path: "/delete",
+      icon: <PersonRemoveIcon />,
+    },
+  ].filter(Boolean);
+
   return (
     <Paper sx={{ pt: "24px" }}>
       <Box

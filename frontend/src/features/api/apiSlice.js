@@ -5,12 +5,13 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8080/api/v1",
     prepareHeaders: (headers, { getState }) => {
-      const token = getState().auth.token;      
+      const token = getState().auth.token;
       if (token) {
         headers.set("authorization", `Bearer ${token}`);
       }
       return headers;
     },
+    credentials: "include",
   }),
   tagTypes: ["Users", "Campgrounds", "Reviews"],
   endpoints: (builder) => ({}),

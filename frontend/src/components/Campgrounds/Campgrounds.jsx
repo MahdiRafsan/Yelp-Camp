@@ -1,10 +1,15 @@
-import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Grid, CircularProgress, Box } from "@mui/material";
 import { useGetCampgroundsQuery } from "../../features/campgrounds/campgroundApi";
 import Pagination from "../Pagination/Pagination";
 import Campground from "./Campground/Campground";
-const Campgrounds = ({ formRef, setCurrentCampgroundId }) => {
+import { useGetCampgroundsByUserQuery } from "../../features/users/userAPI";
+const Campgrounds = ({
+  formRef,
+  setCurrentCampgroundId,
+  userId,
+  isProfile = false,
+}) => {
   const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
   const page = searchParams.get("page");
 
@@ -12,10 +17,16 @@ const Campgrounds = ({ formRef, setCurrentCampgroundId }) => {
     setSearchParams({ page: newPage });
   };
 
-  const { data, isLoading } = useGetCampgroundsQuery({ page });
+  const { data, isLoading } = isProfile
+    ? useGetCampgroundsByUserQuery({ userId, page })
+    : useGetCampgroundsQuery({ page });
+
   const { campgrounds, currentPage, totalPages, totalDocs } = data || {};
+
   return isLoading ? (
-    <CircularProgress color="success" />
+    <Box display="flex" justifyContent="center">
+      <CircularProgress color="success" />
+    </Box>
   ) : (
     <>
       <Grid container spacing={2}>
@@ -39,13 +50,15 @@ const Campgrounds = ({ formRef, setCurrentCampgroundId }) => {
           );
         })}
       </Grid>
-      <Box m={2} display="flex" justifyContent="center">
-        <Pagination
-          count={totalPages}
-          page={currentPage}
-          onPageChange={onPageChangeHandler}
-        />
-      </Box>
+      {totalPages > 1 && (
+        <Box m={2} display="flex" justifyContent="center">
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onPageChange={onPageChangeHandler}
+          />
+        </Box>
+      )}
     </>
   );
 };

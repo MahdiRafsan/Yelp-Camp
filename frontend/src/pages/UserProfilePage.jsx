@@ -1,11 +1,10 @@
-import { Stack } from "@mui/material";
 import ProfileLayout from "../layouts/ProfileLayout";
+import { useSelector } from "react-redux";
+import { selectUser } from "../features/auth/authSlice";
 const UserProfilePage = () => {
-  return (
-    <Stack direction="row" spacing={2}>
-      <ProfileLayout />
-    </Stack>
-  );
+  const user = useSelector(selectUser);
+
+  return <ProfileLayout user={user} />;
 };
 
 export default UserProfilePage;

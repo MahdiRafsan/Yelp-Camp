@@ -11,6 +11,7 @@ import {
   ImageListItemBar,
   IconButton,
   FormControlLabel,
+  Box,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 
@@ -20,9 +21,13 @@ import {
   useUpdateCampgroundMutation,
 } from "../../features/campgrounds/campgroundApi";
 import useToastMessages from "../../hooks/useToastMessages";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/auth/authSlice";
 const CampgroundForm = forwardRef((props, ref) => {
   const { currentCampgroundId, setCurrentCampgroundId } = props;
-  
+
+  const user = useSelector(selectUser);
+
   const showToast = useToastMessages();
   const fileInputRef = useRef();
 
@@ -135,7 +140,7 @@ const CampgroundForm = forwardRef((props, ref) => {
     }
   };
 
-  return (
+  return user ? (
     <Paper ref={ref} sx={{ padding: "16px" }} elevation={6}>
       <Typography component="h1" variant="h5" mb={2} align="center">
         {currentCampgroundId ? `Edit a campground` : "Add a new campground"}
@@ -245,6 +250,14 @@ const CampgroundForm = forwardRef((props, ref) => {
         </Stack>
       </form>
     </Paper>
+  ) : (
+    <Box display="flex" justifyContent="center" alignItems="center">
+      <Paper elevation={6} sx={{ padding: "16px" }}>
+        <Typography component="p" variant="body1" align="center">
+          Sign in to view and add your own campgrounds
+        </Typography>
+      </Paper>
+    </Box>
   );
 });
 

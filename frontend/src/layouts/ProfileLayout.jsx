@@ -3,15 +3,15 @@ import ProfileSidebar from "../components/UserProfile/ProfileSidebar";
 import ProfileHeader from "../components/UserProfile/ProfileHeader";
 import { Grid, Stack } from "@mui/material";
 
-const ProfileLayout = () => {
+const ProfileLayout = ({ user }) => {
   return (
-    <Grid container spacing={3} justifyContent='center'>
+    <Grid container spacing={3} justifyContent="center">
       <Grid item xs={12} sm={3}>
         <ProfileSidebar />
       </Grid>
       <Grid item xs={12} sm={6}>
         <Stack spacing={2}>
-          <ProfileHeader />
+          <ProfileHeader user={user} />
           <Outlet />
         </Stack>
       </Grid>
